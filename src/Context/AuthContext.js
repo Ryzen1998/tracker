@@ -1,81 +1,97 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {createContext,useState,useEffect} from 'react'
-import axios from 'axios';
+import { createContext, useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+
+const AuthContext = createContext("");
+const address = "https://localhost:7287/api";
+
+export const authProvider = ({ children }) => {
+  const [userData, setUserData] = useState({
+    id: 0,
+    name: "",
+    dateOfBirth: "2022-09-09T17:27:06.917Z",
+    email: "",
+    profilePicture: 0,
+    userName: "",
+    password: "",
+  });
+
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [message, setMessage] = useState(null);
+
+  const [authHeader, setAuthHeader] = useState('');
 
 
-const AuthContext = createContext('');
-const address ='https://localhost:7287/api/Auth/regsiter';
-
-export const authProvider=({children})=>{
-  
-    
-  
-
-    const [userData,setUserData]=useState({ 
-        id: 0,
-        name:'',
-        dateOfBirth: "2022-09-09T17:27:06.917Z",
-        email:'',
-        profilePicture:0,
-        userName:'',
-        password: ''
-    });
-
-    const [isSuccess,setIsSuccess]=useState(false);
-   
-    const [message,setMessage]=useState(null);
+  let navigate = useNavigate();
 
 
-    const config = {
-        method: 'post',
-        url: address,
-        headers: { 
-            'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        data : JSON.stringify(userData)
-      };
 
 
-   const  onRegisterClick= async ()=>{
-        
-   
-     
-
-    axios(config)
-    .then(function (response) {
-      console.log(response.data.message);
-      if(response.data.message==='202'){
-        setIsSuccess(true)
-        setMessage(null)
+  const onRegisterClick = async () => {
+    axios
+      .post(`${address}/Auth/regsiter`, {
+        ...userData,
+      })
+      .then((response) => {
+        if (response.data.code === 202) {
+          setIsSuccess(true);
+          setMessage(null);
+            
       
+            navigate('/');
         
+          
 
-      }
-      else{
-        setMessage(response.data.message)
-        setIsSuccess(false)
-    
+           return true
+
+
+        } else {
+          setMessage(response.data.message);
+          setIsSuccess(false);
+
+          return false
         }
+      })
+      .catch((error) => {});
+  };
+
+  const onLoginClick = async () => {
+    axios
+      .post(`${address}/Auth/login`, {
+        email: userData.email,
+        password: userData.password,
+      })
+      .then((response) => {
+        if (response.data.code === 202) {
+          setIsSuccess(true);
+          setMessage(null);
+          setAuthHeader(response.data.data);
+        } else {
+          setMessage(response.data.message);
+          setIsSuccess(false);
+        }
+      })
+      .catch((error) => {});
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        onRegisterClick,
+        setUserData,
+        userData,
+        isSuccess,
+        message,
+        onLoginClick,
+        authHeader
       
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-
-
-       
-
-             
-        
-         
-    }
-
-   
-    return <AuthContext.Provider value={{onRegisterClick,setUserData,userData,isSuccess,message}}>{children}</AuthContext.Provider>
-
-
-}
-
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthContext;
