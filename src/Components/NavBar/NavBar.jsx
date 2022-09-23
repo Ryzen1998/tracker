@@ -24,7 +24,7 @@ const NavBar = () => {
             <ul className="inline">
               <li>  <Link to='/about'>About</Link></li>
               <li>
-                {authHeader===''&&(window.location.pathname === "/login" ? (
+                {authHeader===''&&(window.location.pathname === "/login"||window.location.pathname === "/" ? (
                   <Link to="/register">Register</Link>
                 ) : (
                   <Link to="/login">Login</Link>
