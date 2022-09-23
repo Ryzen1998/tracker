@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AuthContext = createContext("");
-const address = "https://localhost:7287/api";
+const address = "https://fadedapi.azurewebsites.net/api";
 
 export const authProvider = ({ children }) => {
   const [userData, setUserData] = useState({
@@ -17,18 +17,23 @@ export const authProvider = ({ children }) => {
     password: "",
   });
 
+
+
+
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [message, setMessage] = useState(null);
 
-  const [authHeader, setAuthHeader] = useState('');
-
+  const [authHeader, setAuthHeader] = useState("");
+  
 
   let navigate = useNavigate();
+  // useEffect(()=>{
+  //   if(authHeader===''){
+  //     navigate('/register')
 
-
-
-
+  //   }
+  // },[])
   const onRegisterClick = async () => {
     axios
       .post(`${address}/Auth/regsiter`, {
@@ -38,23 +43,24 @@ export const authProvider = ({ children }) => {
         if (response.data.code === 202) {
           setIsSuccess(true);
           setMessage(null);
-            
-      
-            navigate('/');
-        
-          
 
-           return true
+          navigate("/login");
 
-
+          return true;
         } else {
+          if(response.data.message!==null){
           setMessage(response.data.message);
+          }
+          else{
+            setMessage('Oops something went wrong 😓');
+
+          }
           setIsSuccess(false);
 
-          return false
+          return false;
         }
       })
-      .catch((error) => {});
+      .catch((error) => {setMessage('Validation failed,Check all the fields 😓')});
   };
 
   const onLoginClick = async () => {
@@ -65,16 +71,26 @@ export const authProvider = ({ children }) => {
       })
       .then((response) => {
         if (response.data.code === 202) {
-          setIsSuccess(true);
+          
           setMessage(null);
           setAuthHeader(response.data.data);
+          sessionStorage.setItem('authHeader',response.data.data);
+          sessionStorage.setItem('userName',userData.email)
+         
+          navigate('/message')
         } else {
           setMessage(response.data.message);
           setIsSuccess(false);
         }
       })
-      .catch((error) => {});
+      .catch((error) => { setMessage('Server says no no😡, Please check all the fields');});
   };
+
+  const logout=async()=>{
+    setAuthHeader('');
+    navigate('/login')
+  }
+
 
   return (
     <AuthContext.Provider
@@ -85,7 +101,8 @@ export const authProvider = ({ children }) => {
         isSuccess,
         message,
         onLoginClick,
-        authHeader
+        authHeader,
+        logout,
       
       }}
     >

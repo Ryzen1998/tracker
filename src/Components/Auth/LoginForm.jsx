@@ -2,14 +2,14 @@ import React,{useContext} from "react";
 import Authcontext from '../../Context/AuthContext'
 
 function LoginForm() {
-    const {setUserData,userData,onLoginClick}=useContext(Authcontext)
+    const {setUserData,userData,onLoginClick,message}=useContext(Authcontext)
   return (
     <>
       <form className="paper container">
-        <h1 className="text-center">My Space</h1>
+        <h1 className="text-center">Faded</h1>
 
         <div className="row flex-center ">
-          <div className="col col ">
+          <div className="col-5 col">
             <label htmlFor="email">Email</label>
             <input
               placeholder="example@example.com"
@@ -24,7 +24,7 @@ function LoginForm() {
         </div>
 
         <div className="row  flex-center">
-          <div className="col col">
+          <div className="col-5 col">
             <label htmlFor="password">Password</label>
             <input
               placeholder="Secret Key"
@@ -43,11 +43,16 @@ function LoginForm() {
           <div className="col col">
             <button
               type="button"
-              style={{ width: "10vw" }}
-              className="btn-secondary btn-secondary-outline" onClick={onLoginClick}
+             disabled={userData.email===''||userData.password===''?true:false}
+              className="btn-block" onClick={onLoginClick}
             >
               Login
             </button>
+
+
+          {message !== null && (
+            <div className="alert alert-danger margin-top-small">{message}</div>
+          )}
           </div>
         </div>
       </form>

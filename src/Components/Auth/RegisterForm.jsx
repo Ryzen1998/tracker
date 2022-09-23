@@ -6,12 +6,12 @@ import Authcontext from "../../Context/AuthContext";
 
 
 function RegisterForm() {
-  const { setUserData, userData, onRegisterClick, isSuccess, message } =
+  const { setUserData, userData, onRegisterClick, validateInput, message } =
     useContext(Authcontext);
 
   return (
-    <form className="paper container">
-      <h1 className="text-center">My Space</h1>
+    <form style={{}} className="paper container">
+      <h1 className="text-center">Faded</h1>
 
       <div className="row ">
         <div className="col-6 col ">
@@ -66,7 +66,7 @@ function RegisterForm() {
 
         <div className="col-6 col">
           <label htmlFor="pfp">Profile Picture</label>
-          <input
+          <input disabled
             style={{ width: "20vw" }}
             type="file"
             alt="pfp"
@@ -116,18 +116,17 @@ function RegisterForm() {
         <div className="col col">
           <button
             type="button"
-            style={{ width: "24vw" }}
-            className="btn-secondary btn-secondary-outline"
+            disabled={userData.email===''||userData.userName===''
+            ||userData.name===''||userData.password===''?true:false}
+
+            className="btn-block"
+          
             onClick={onRegisterClick}
           >
             Register
           </button>
 
-          {isSuccess && (
-            <p className="margin-top-large">
-              Your account has been created
-            </p>
-          )}
+        
 
           {message !== null && (
             <div className="alert alert-danger margin-top-small">{message}</div>
