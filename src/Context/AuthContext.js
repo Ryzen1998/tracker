@@ -18,7 +18,8 @@ export const authProvider = ({ children }) => {
   });
 
 
-
+  let [validation,setValidation]=useState(false)
+  let [isLoading,setIsLoading]=useState(false)
 
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -35,6 +36,7 @@ export const authProvider = ({ children }) => {
   //   }
   // },[])
   const onRegisterClick = async () => {
+    setIsLoading(true)
     axios
       .post(`${address}/Auth/regsiter`, {
         ...userData,
@@ -42,28 +44,32 @@ export const authProvider = ({ children }) => {
       .then((response) => {
         if (response.data.code === 202) {
           setIsSuccess(true);
-          setMessage(null);
+      
 
           navigate("/login");
+          setIsLoading(false);
 
           return true;
         } else {
           if(response.data.message!==null){
-          setMessage(response.data.message);
+            setValidation(true)
+          setIsLoading(false);
           }
           else{
-            setMessage('Oops something went wrong 😓');
+         
 
           }
           setIsSuccess(false);
+          setIsLoading(false);
 
           return false;
         }
       })
-      .catch((error) => {setMessage('Validation failed,Check all the fields 😓')});
+      .catch((error) => {  setIsLoading(false);});
   };
 
   const onLoginClick = async () => {
+    setIsLoading(true);
     axios
       .post(`${address}/Auth/login`, {
         email: userData.email,
@@ -78,12 +84,14 @@ export const authProvider = ({ children }) => {
           sessionStorage.setItem('userName',userData.email)
          
           navigate('/message')
+          setIsLoading(false)
         } else {
-          setMessage(response.data.message);
+         
           setIsSuccess(false);
+         
         }
       })
-      .catch((error) => { setMessage('Server says no no😡, Please check all the fields');});
+      .catch((error) => { setValidation(true);setIsLoading(false)});
   };
 
   const logout=async()=>{
@@ -103,6 +111,9 @@ export const authProvider = ({ children }) => {
         onLoginClick,
         authHeader,
         logout,
+        validation,
+        setValidation,
+        isLoading
       
       }}
     >

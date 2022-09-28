@@ -28,7 +28,7 @@ export const chatProvider = ({ children }) => {
             setMessage('');
         }
         catch(e) {
-            //console.log(e);
+            //console.log(e,'ss');
         }
     }
     else {
