@@ -7,8 +7,7 @@ import chatContext from "../../../Context/ChatContext";
 
 const ChatInput = () => {
   const { setMessage,sendMessage,message} = useContext(chatContext);
-  var viewport = document.querySelector("meta[name=viewport]");
-viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+  
   return (
    <>
     {/* //chatinput */}
