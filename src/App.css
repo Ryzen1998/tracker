@@ -38,7 +38,7 @@
 }
 
 
-@media screen and (max-width: 600px) {
+/* @media screen and (max-width: 600px) {
 
 	.speech{
 		max-width: 320px;
@@ -48,6 +48,19 @@
 		max-width: 320px;
 
 	};
+} */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 800px) {
+
+	.speech{
+		max-width: 320px;
+
+	};
+	.speechsender{
+		max-width: 320px;
+
+	};
+	
 }
 
 .loader {
