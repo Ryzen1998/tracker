@@ -6,6 +6,10 @@
   
 }
 
+.rcbubble-holder{
+	display: flex;
+}
+
 
 /* (A) SPEECH BOX */
 .speech {
@@ -21,7 +25,24 @@
 	margin-top:1vh;
 }
 
+.speech::before {
+	/* (B1-1) ATTACH TRANSPARENT BORDERS */
+	content: "";
+	border: 20px solid transparent;
+   
+	/* (B1-2) NECESSARY TO POSITION THE "TAIL" */
+	position: absolute;
+}
 
+  .bottom.speech::after {
+	/* (B2-1) DOWN TRIANGLE */
+	border-top-color: #a53d38;
+	border-bottom: 0;
+   
+	/* (B2-2) POSITION AT BOTTOM */
+	bottom: -20px; left: 50%;
+	margin-left: -20px;
+  }
 
 .speechsender {
 
