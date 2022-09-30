@@ -1,17 +1,14 @@
-import React from 'react'
-
+import React from "react";
+import { Box } from "@mui/material";
 
 const ReceiverBubble = (props) => {
   return (
     <>
-    <div style={{backgroundColor:'#FFE45E'}} className="talk-bubble tri-right left-top">
- <span className='bubble-username'>{props.userName}</span>
-  <div className="talktext">
-    <p>{props.message}</p>
-  </div>
-</div>
+      <Box className="speech left">
+        <p>{props.message}</p>
+      </Box>
     </>
-  )
-}
+  );
+};
 
-export default ReceiverBubble
+export default ReceiverBubble;
